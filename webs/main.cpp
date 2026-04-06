@@ -3,103 +3,151 @@
 #include <iostream>
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <thread>
+#include <string>
+
+// HTTP Request Structure
+struct HttpRequest {
+    std::string method;
+    std::string path;
+    std::string version;
+    std::string body;
+};
+
+// HTTP Parser Function
+HttpRequest parseRequest(const std::string& request) {
+
+    HttpRequest req;
+
+    // Split headers and body
+    size_t pos = request.find("\r\n\r\n");
+    std::string headers = request.substr(0, pos);
+    req.body = (pos != std::string::npos) ? request.substr(pos + 4) : "";
+
+    // First line (METHOD PATH VERSION)
+    size_t lineEnd = headers.find("\r\n");
+    std::string firstLine = headers.substr(0, lineEnd);
+
+    // Parse method, path, version
+    size_t mEnd = firstLine.find(" ");
+    size_t pEnd = firstLine.find(" ", mEnd + 1);
+
+    req.method = firstLine.substr(0, mEnd);
+    req.path = firstLine.substr(mEnd + 1, pEnd - mEnd - 1);
+    req.version = firstLine.substr(pEnd + 1);
+
+    return req;
+}
+
+// Handle each client (MULTITHREADING)
+void handleClient(SOCKET clientSocket) {
+
+    char buffer[4096] = { 0 };
+
+    int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+
+    if (bytesReceived > 0) {
+
+        std::string requestStr(buffer, bytesReceived);
+
+        // Parse request
+        HttpRequest req = parseRequest(requestStr);
+
+        std::cout << "\n--- Parsed Request ---\n";
+        std::cout << "Method: " << req.method << std::endl;
+        std::cout << "Path: " << req.path << std::endl;
+        std::cout << "Body: " << req.body << std::endl;
+
+        // Basic Routing
+        std::string responseBody;
+
+        if (req.path == "/") {
+            responseBody = "Welcome to C++ Server";
+        }
+        else if (req.path == "/login") {
+            responseBody = "Login endpoint hit";
+        }
+        else {
+            responseBody = "404 Not Found";
+        }
+
+        // HTTP Response
+        std::string response =
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/plain\r\n"
+            "Content-Length: " + std::to_string(responseBody.size()) + "\r\n"
+            "\r\n" +
+            responseBody;
+
+        send(clientSocket, response.c_str(), response.size(), 0);
+    }
+
+    closesocket(clientSocket);
+}
 
 int main() {
 
-    //Setting up the server
-	//1) Initiqlize Winsock
-    
+    // 1) Initialize Winsock
     WSADATA wsaData;
-    int wsaerr;
-    WORD wVersionRequested = MAKEWORD(2, 2);
-    wsaerr = WSAStartup(wVersionRequested, &wsaData);
+    WORD version = MAKEWORD(2, 2);
 
-    if (wsaerr != 0) {
-        std::cout << "The Winsock dll not found!" << std::endl;
-        return 0;
-    }
-    else {
-        std::cout << "The Winsock dll found" << std::endl;
-        std::cout << "The status: " << wsaData.szSystemStatus << std::endl;
+    if (WSAStartup(version, &wsaData) != 0) {
+        std::cout << "Winsock init failed\n";
+        return 1;
     }
 
-	//2) Create a socket
-    SOCKET serverSocket;
-    serverSocket = INVALID_SOCKET;
-	serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    // 2) Create socket
+    SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
     if (serverSocket == INVALID_SOCKET) {
-        std::cout << "Error at socket(): " << WSAGetLastError() << std::endl;
+        std::cout << "Socket creation failed\n";
         WSACleanup();
-        return 0;
-    } else {
-        std::cout << "Socket is OK!" << std::endl;
+        return 1;
     }
 
-	//3) Bind the socket
-    sockaddr_in service;
-    service.sin_family = AF_INET;
-    service.sin_port = htons(54000);
-    service.sin_addr.s_addr = INADDR_ANY;
+    // 3) Bind
+    sockaddr_in serverAddr;
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(54000);
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
 
-    if (bind(serverSocket, (SOCKADDR*)&service, sizeof(service)) == SOCKET_ERROR) {
-        std::cout << "bind() failed: " << WSAGetLastError() << std::endl;
+    if (bind(serverSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+        std::cout << "Bind failed\n";
         closesocket(serverSocket);
         WSACleanup();
         return 1;
     }
-    else {
-        std::cout << "bind() is OK!" << std::endl;
-    }
 
-	//4) Listen for connections
-    if (listen(serverSocket, 1) == SOCKET_ERROR) {
-        std::cout << "listen(): Error listening on socket: " << WSAGetLastError() << std::endl;
-    }
-    else {
-        std::cout << "listen() is OK! I'm waiting for new connections..." << std::endl;
-    }
-
-    //5) Accept connections
-    SOCKET acceptSocket;
-    acceptSocket = accept(serverSocket, nullptr, nullptr);
-
-    if (acceptSocket == INVALID_SOCKET) {
-        std::cout << "accept failed: " << WSAGetLastError() << std::endl;
+    // 4) Listen
+    if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
+        std::cout << "Listen failed\n";
+        closesocket(serverSocket);
         WSACleanup();
-        return -1;
-    }
-    else {
-        std::cout << "accept() is OK!" << std::endl;
+        return 1;
     }
 
-    //6) Receive and Send Data
-    //Recieve
-    char receiveBuffer[200];
-    int rbyteCount = recv(acceptSocket, receiveBuffer, 200, 0);
+    std::cout << "🚀 Server running on http://localhost:54000\n";
 
-    if (rbyteCount < 0) {
-        std::cout << "Server recv error: " << WSAGetLastError() << std::endl;
-        return 0;
-    }
-    else {
-        std::cout << "Received data: " << receiveBuffer << std::endl;
-    }
+    // 5) Accept loop (MULTITHREADED)
+    while (true) {
 
-    //Send
-    char buffer[200];
-    std::cout << "Enter the message: ";
-    std::cin.getline(buffer, 200);
-    int sbyteCount = send(acceptSocket, buffer, 200, 0);
+        SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
 
-    if (sbyteCount == SOCKET_ERROR) {
-        std::cout << "Server send error: " << WSAGetLastError() << std::endl;
-        return -1;
-    }
-    else {
-        std::cout << "Server: Sent " << sbyteCount << " bytes" << std::endl;
+        if (clientSocket == INVALID_SOCKET) {
+            std::cout << "Accept failed\n";
+            continue;
+        }
+
+        std::cout << "Client connected!\n";
+
+        // Create thread
+        std::thread t(handleClient, clientSocket);
+        t.detach();
     }
 
+    // Cleanup (never reached)
+    closesocket(serverSocket);
+    WSACleanup();
 
     return 0;
 }

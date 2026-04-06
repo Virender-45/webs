@@ -127,7 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="auth.cpp" />
+    <ClCompile Include="database.cpp" />
+    <ClCompile Include="http_parse.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="router.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="json.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
