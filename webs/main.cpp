@@ -16,7 +16,7 @@ using json = nlohmann::json;
 
 //https://github.com/nlohmann/json/tree/develop/include/nlohmann
 
-// 🔐 Database
+// Database
 struct User {
     std::string username;
     std::string password;
@@ -26,14 +26,14 @@ std::vector<User> users;
 std::map<std::string, std::string> sessions;
 std::mutex mtx;
 
-// 🔹 HTTP Request
+// HTTP Request
 struct HttpRequest {
     std::string method;
     std::string path;
     std::string body;
 };
 
-// 🔹 Parse HTTP
+// Parse HTTP
 HttpRequest parseRequest(const std::string& request) {
     HttpRequest req;
 
@@ -53,12 +53,12 @@ HttpRequest parseRequest(const std::string& request) {
     return req;
 }
 
-// 🔑 Generate Token (simple)
+// Generate Token (simple)
 std::string generateToken(const std::string& username) {
     return username + "_token";
 }
 
-// 🔹 Create HTTP response
+// Create HTTP response
 std::string createResponse(const json& body, int status = 200) {
     std::string bodyStr = body.dump();
 
@@ -68,7 +68,7 @@ std::string createResponse(const json& body, int status = 200) {
         "\r\n" + bodyStr;
 }
 
-// 🔹 Handle client
+// Handle client
 void handleClient(SOCKET clientSocket) {
 
     char buffer[4096] = { 0 };
@@ -85,7 +85,7 @@ void handleClient(SOCKET clientSocket) {
         try {
             json body = req.body.empty() ? json{} : json::parse(req.body);
 
-            // 🔹 REGISTER USER
+            // REGISTER USER
             if (req.path == "/users" && req.method == "POST") {
 
                 std::lock_guard<std::mutex> lock(mtx);
@@ -96,7 +96,7 @@ void handleClient(SOCKET clientSocket) {
                 response["message"] = "User created";
             }
 
-            // 🔹 LOGIN
+            // LOGIN
             else if (req.path == "/login" && req.method == "POST") {
 
                 std::string username = body["username"];
@@ -131,7 +131,7 @@ void handleClient(SOCKET clientSocket) {
                 }
             }
 
-            // 🔹 PROTECTED ROUTE
+            // PROTECTED ROUTE
             else if (req.path == "/profile" && req.method == "GET") {
 
                 // VERY SIMPLE TOKEN CHECK (improve later)
@@ -178,7 +178,7 @@ void handleClient(SOCKET clientSocket) {
 int main() {
 
     WSADATA wsaData;
-    WSAStartup(MAKEWORD(2, 2), &wsaData);
+    //WSAStartup(MAKEWORD(2, 2), &wsaData);
 
     SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
