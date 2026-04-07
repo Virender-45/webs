@@ -5,81 +5,169 @@
 #include <ws2tcpip.h>
 #include <thread>
 #include <string>
+#include <vector>
+#include <map>
+#include <mutex>
+#include "json.hpp"
 
-// HTTP Request Structure
+using json = nlohmann::json;
+
+//https://github.com/nlohmann/json/tree/develop/include/nlohmann
+
+// 🔐 Database
+struct User {
+    std::string username;
+    std::string password;
+};
+
+std::vector<User> users;
+std::map<std::string, std::string> sessions;
+std::mutex mtx;
+
+// 🔹 HTTP Request
 struct HttpRequest {
     std::string method;
     std::string path;
-    std::string version;
     std::string body;
 };
 
-// HTTP Parser Function
+// 🔹 Parse HTTP
 HttpRequest parseRequest(const std::string& request) {
-
     HttpRequest req;
 
-    // Split headers and body
     size_t pos = request.find("\r\n\r\n");
     std::string headers = request.substr(0, pos);
     req.body = (pos != std::string::npos) ? request.substr(pos + 4) : "";
 
-    // First line (METHOD PATH VERSION)
     size_t lineEnd = headers.find("\r\n");
     std::string firstLine = headers.substr(0, lineEnd);
 
-    // Parse method, path, version
     size_t mEnd = firstLine.find(" ");
     size_t pEnd = firstLine.find(" ", mEnd + 1);
 
     req.method = firstLine.substr(0, mEnd);
     req.path = firstLine.substr(mEnd + 1, pEnd - mEnd - 1);
-    req.version = firstLine.substr(pEnd + 1);
 
     return req;
 }
 
-// Handle each client (MULTITHREADING)
+// 🔑 Generate Token (simple)
+std::string generateToken(const std::string& username) {
+    return username + "_token";
+}
+
+// 🔹 Create HTTP response
+std::string createResponse(const json& body, int status = 200) {
+    std::string bodyStr = body.dump();
+
+    return "HTTP/1.1 " + std::to_string(status) + " OK\r\n"
+        "Content-Type: application/json\r\n"
+        "Content-Length: " + std::to_string(bodyStr.size()) + "\r\n"
+        "\r\n" + bodyStr;
+}
+
+// 🔹 Handle client
 void handleClient(SOCKET clientSocket) {
 
     char buffer[4096] = { 0 };
-
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
 
     if (bytesReceived > 0) {
 
         std::string requestStr(buffer, bytesReceived);
-
-        // Parse request
         HttpRequest req = parseRequest(requestStr);
 
-        std::cout << "\n--- Parsed Request ---\n";
-        std::cout << "Method: " << req.method << std::endl;
-        std::cout << "Path: " << req.path << std::endl;
-        std::cout << "Body: " << req.body << std::endl;
+        json response;
+        int status = 200;
 
-        // Basic Routing
-        std::string responseBody;
+        try {
+            json body = req.body.empty() ? json{} : json::parse(req.body);
 
-        if (req.path == "/") {
-            responseBody = "Welcome to C++ Server";
+            // 🔹 REGISTER USER
+            if (req.path == "/users" && req.method == "POST") {
+
+                std::lock_guard<std::mutex> lock(mtx);
+
+                User newUser{ body["username"], body["password"] };
+                users.push_back(newUser);
+
+                response["message"] = "User created";
+            }
+
+            // 🔹 LOGIN
+            else if (req.path == "/login" && req.method == "POST") {
+
+                std::string username = body["username"];
+                std::string password = body["password"];
+
+                bool found = false;
+
+                {
+                    std::lock_guard<std::mutex> lock(mtx);
+
+                    for (auto& user : users) {
+                        if (user.username == username && user.password == password) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (found) {
+                    std::string token = generateToken(username);
+
+                    {
+                        std::lock_guard<std::mutex> lock(mtx);
+                        sessions[token] = username;
+                    }
+
+                    response["token"] = token;
+                }
+                else {
+                    response["error"] = "Invalid credentials";
+                    status = 401;
+                }
+            }
+
+            // 🔹 PROTECTED ROUTE
+            else if (req.path == "/profile" && req.method == "GET") {
+
+                // VERY SIMPLE TOKEN CHECK (improve later)
+                if (requestStr.find("Authorization: Bearer ") != std::string::npos) {
+
+                    size_t pos = requestStr.find("Authorization: Bearer ") + 22;
+                    std::string token = requestStr.substr(pos, 20);
+
+                    std::lock_guard<std::mutex> lock(mtx);
+
+                    if (sessions.find(token) != sessions.end()) {
+                        response["user"] = sessions[token];
+                    }
+                    else {
+                        response["error"] = "Invalid token";
+                        status = 401;
+                    }
+
+                }
+                else {
+                    response["error"] = "No token provided";
+                    status = 401;
+                }
+            }
+
+            else {
+                response["error"] = "Not Found";
+                status = 404;
+            }
+
         }
-        else if (req.path == "/login") {
-            responseBody = "Login endpoint hit";
-        }
-        else {
-            responseBody = "404 Not Found";
+        catch (...) {
+            response["error"] = "Invalid JSON";
+            status = 400;
         }
 
-        // HTTP Response
-        std::string response =
-            "HTTP/1.1 200 OK\r\n"
-            "Content-Type: text/plain\r\n"
-            "Content-Length: " + std::to_string(responseBody.size()) + "\r\n"
-            "\r\n" +
-            responseBody;
-
-        send(clientSocket, response.c_str(), response.size(), 0);
+        std::string httpResponse = createResponse(response, status);
+        send(clientSocket, httpResponse.c_str(), httpResponse.size(), 0);
     }
 
     closesocket(clientSocket);
@@ -87,65 +175,28 @@ void handleClient(SOCKET clientSocket) {
 
 int main() {
 
-    // 1) Initialize Winsock
     WSADATA wsaData;
-    WORD version = MAKEWORD(2, 2);
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
 
-    if (WSAStartup(version, &wsaData) != 0) {
-        std::cout << "Winsock init failed\n";
-        return 1;
-    }
-
-    // 2) Create socket
     SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (serverSocket == INVALID_SOCKET) {
-        std::cout << "Socket creation failed\n";
-        WSACleanup();
-        return 1;
-    }
-
-    // 3) Bind
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(54000);
     serverAddr.sin_addr.s_addr = INADDR_ANY;
 
-    if (bind(serverSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-        std::cout << "Bind failed\n";
-        closesocket(serverSocket);
-        WSACleanup();
-        return 1;
-    }
+    bind(serverSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
+    listen(serverSocket, SOMAXCONN);
 
-    // 4) Listen
-    if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
-        std::cout << "Listen failed\n";
-        closesocket(serverSocket);
-        WSACleanup();
-        return 1;
-    }
+    std::cout << "🚀 API Server running on http://localhost:54000\n";
 
-    std::cout << "🚀 Server running on http://localhost:54000\n";
-
-    // 5) Accept loop (MULTITHREADED)
     while (true) {
-
         SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
 
-        if (clientSocket == INVALID_SOCKET) {
-            std::cout << "Accept failed\n";
-            continue;
-        }
-
-        std::cout << "Client connected!\n";
-
-        // Create thread
         std::thread t(handleClient, clientSocket);
         t.detach();
     }
 
-    // Cleanup (never reached)
     closesocket(serverSocket);
     WSACleanup();
 
