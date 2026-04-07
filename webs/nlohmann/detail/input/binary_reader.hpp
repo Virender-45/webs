@@ -1,8 +1,8 @@
-//     __ _____ _____ _____
+"//     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
 // |  |  |__   |  |  | | | |  version 3.12.0
 // |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
+"/
 // SPDX-FileCopyrightText: 2013-2026 Niels Lohmann <https://nlohmann.me>
 // SPDX-License-Identifier: MIT
 
@@ -24,17 +24,17 @@
     #include <bit>  //byteswap
 #endif
 
-#include <nlohmann/detail/exceptions.hpp>
-#include <nlohmann/detail/input/input_adapters.hpp>
-#include <nlohmann/detail/input/json_sax.hpp>
-#include <nlohmann/detail/input/lexer.hpp>
-#include <nlohmann/detail/macro_scope.hpp>
-#include <nlohmann/detail/meta/is_sax.hpp>
-#include <nlohmann/detail/meta/type_traits.hpp>
-#include <nlohmann/detail/string_concat.hpp>
-#include <nlohmann/detail/value_t.hpp>
+#include "nlohmann/detail/exceptions.hpp"
+#include "nlohmann/detail/input/input_adapters.hpp"
+#include "nlohmann/detail/input/json_sax.hpp"
+#include "nlohmann/detail/input/lexer.hpp"
+#include "nlohmann/detail/macro_scope.hpp"
+#include "nlohmann/detail/meta/is_sax.hpp"
+#include "nlohmann/detail/meta/type_traits.hpp"
+#include "nlohmann/detail/string_concat.hpp"
+#include "nlohmann/detail/value_t.hpp"
 
-NLOHMANN_JSON_NAMESPACE_BEGIN
+// NLOHMANN_JSON_NAMESPACE_BEGIN
 namespace detail
 {
 

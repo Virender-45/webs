@@ -1,6 +1,6 @@
-//     __ _____ _____ _____
+"//     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.12.0
+"/ |  |  |__   |  |  | | | |  version 3.12.0
 // |_____|_____|_____|_|___|  https://github.com/nlohmann/json
 //
 // SPDX-FileCopyrightText: 2013-2026 Niels Lohmann <https://nlohmann.me>
@@ -23,13 +23,13 @@
 #include <valarray> // valarray
 #include <vector> // vector
 
-#include <nlohmann/detail/iterators/iteration_proxy.hpp>
-#include <nlohmann/detail/meta/cpp_future.hpp>
-#include <nlohmann/detail/meta/std_fs.hpp>
-#include <nlohmann/detail/meta/type_traits.hpp>
-#include <nlohmann/detail/value_t.hpp>
+#include "nlohmann/detail/iterators/iteration_proxy.hpp"
+#include "nlohmann/detail/meta/cpp_future.hpp"
+#include "nlohmann/detail/meta/std_fs.hpp"
+#include "nlohmann/detail/meta/type_traits.hpp"
+#include "nlohmann/detail/value_t.hpp"
 
-NLOHMANN_JSON_NAMESPACE_BEGIN
+// NLOHMANN_JSON_NAMESPACE_BEGIN
 namespace detail
 {
 

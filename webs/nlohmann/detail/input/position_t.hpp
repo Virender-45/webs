@@ -10,9 +10,9 @@
 
 #include <cstddef> // size_t
 
-#include <nlohmann/detail/abi_macros.hpp>
+#include "nlohmann/detail/abi_macros.hpp"
 
-NLOHMANN_JSON_NAMESPACE_BEGIN
+// NLOHMANN_JSON_NAMESPACE_BEGIN
 namespace detail
 {
 

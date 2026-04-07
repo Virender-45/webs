@@ -16,9 +16,9 @@
 #include <limits> // numeric_limits
 #include <type_traits> // conditional
 
-#include <nlohmann/detail/macro_scope.hpp>
+#include "nlohmann/detail/macro_scope.hpp"
 
-NLOHMANN_JSON_NAMESPACE_BEGIN
+// NLOHMANN_JSON_NAMESPACE_BEGIN
 namespace detail
 {
 
