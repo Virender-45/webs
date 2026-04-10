@@ -1,4 +1,4 @@
-#pragma comment(lib, "ws2_32.lib")
+﻿#pragma comment(lib, "ws2_32.lib")
 
 #include <iostream>
 #include <winsock2.h>
@@ -8,15 +8,14 @@
 #include <vector>
 #include <map>
 #include <mutex>
+#include <sstream>
+#include <algorithm>
+
 #include "json.hpp"
-
-
 
 using json = nlohmann::json;
 
-//https://github.com/nlohmann/json/tree/develop/include/nlohmann
-
-// Database
+// ================= DATABASE =================
 struct User {
     std::string username;
     std::string password;
@@ -26,49 +25,83 @@ std::vector<User> users;
 std::map<std::string, std::string> sessions;
 std::mutex mtx;
 
-// HTTP Request
+// ================= HTTP REQUEST =================
 struct HttpRequest {
     std::string method;
     std::string path;
+    std::string version;
     std::string body;
+    std::map<std::string, std::string> headers;
 };
 
-// Parse HTTP
+// ================= PARSE REQUEST =================
 HttpRequest parseRequest(const std::string& request) {
+
     HttpRequest req;
 
     size_t pos = request.find("\r\n\r\n");
-    std::string headers = request.substr(0, pos);
+    std::string headerPart = request.substr(0, pos);
     req.body = (pos != std::string::npos) ? request.substr(pos + 4) : "";
 
-    size_t lineEnd = headers.find("\r\n");
-    std::string firstLine = headers.substr(0, lineEnd);
+    std::istringstream stream(headerPart);
+    std::string line;
 
-    size_t mEnd = firstLine.find(" ");
-    size_t pEnd = firstLine.find(" ", mEnd + 1);
+    std::getline(stream, line);
+    line.pop_back();
 
-    req.method = firstLine.substr(0, mEnd);
-    req.path = firstLine.substr(mEnd + 1, pEnd - mEnd - 1);
+    std::istringstream firstLine(line);
+    firstLine >> req.method >> req.path >> req.version;
+
+    while (std::getline(stream, line) && line != "\r") {
+        line.pop_back();
+
+        size_t colon = line.find(": ");
+        if (colon != std::string::npos) {
+            std::string key = line.substr(0, colon);
+            std::string value = line.substr(colon + 2);
+
+            std::transform(key.begin(), key.end(), key.begin(), ::tolower);
+            req.headers[key] = value;
+        }
+    }
 
     return req;
 }
 
-// Generate Token (simple)
+// ================= TOKEN =================
 std::string generateToken(const std::string& username) {
     return username + "_token";
 }
 
-// Create HTTP response
-std::string createResponse(const json& body, int status = 200) {
-    std::string bodyStr = body.dump();
-
-    return "HTTP/1.1 " + std::to_string(status) + " OK\r\n"
-        "Content-Type: application/json\r\n"
-        "Content-Length: " + std::to_string(bodyStr.size()) + "\r\n"
-        "\r\n" + bodyStr;
+// ================= STATUS TEXT =================
+std::string getStatusText(int status) {
+    switch (status) {
+    case 200: return "OK";
+    case 201: return "Created";
+    case 400: return "Bad Request";
+    case 401: return "Unauthorized";
+    case 404: return "Not Found";
+    default: return "OK";
+    }
 }
 
-// Handle client
+// ================= RESPONSE =================
+std::string createResponse(const json& body, int status = 200) {
+
+    std::string bodyStr = body.dump();
+
+    std::string response =
+        "HTTP/1.1 " + std::to_string(status) + " " + getStatusText(status) + "\r\n"
+        "Content-Type: application/json\r\n"
+        "Content-Length: " + std::to_string(bodyStr.size()) + "\r\n"
+        "Connection: close\r\n"
+        "\r\n" +
+        bodyStr;
+
+    return response;
+}
+
+// ================= CLIENT HANDLER =================
 void handleClient(SOCKET clientSocket) {
 
     char buffer[4096] = { 0 };
@@ -85,7 +118,7 @@ void handleClient(SOCKET clientSocket) {
         try {
             json body = req.body.empty() ? json{} : json::parse(req.body);
 
-            // REGISTER USER
+            // ========== REGISTER ==========
             if (req.path == "/users" && req.method == "POST") {
 
                 std::lock_guard<std::mutex> lock(mtx);
@@ -94,9 +127,10 @@ void handleClient(SOCKET clientSocket) {
                 users.push_back(newUser);
 
                 response["message"] = "User created";
+                status = 201;  // ✅ ADDED
             }
 
-            // LOGIN
+            // ========== LOGIN ==========
             else if (req.path == "/login" && req.method == "POST") {
 
                 std::string username = body["username"];
@@ -131,16 +165,24 @@ void handleClient(SOCKET clientSocket) {
                 }
             }
 
-            // PROTECTED ROUTE
+            // ========== PROTECTED ==========
             else if (req.path == "/profile" && req.method == "GET") {
 
-                // VERY SIMPLE TOKEN CHECK (improve later)
-                if (requestStr.find("Authorization: Bearer ") != std::string::npos) {
+                std::string token;
 
-                    size_t pos = requestStr.find("Authorization: Bearer ") + 22;
-                    size_t end = requestStr.find("\r\n", pos);
-                    std::string token = requestStr.substr(pos, end - pos);
+                if (req.headers.find("authorization") != req.headers.end()) {
+                    std::string authHeader = req.headers["authorization"];
 
+                    if (authHeader.find("Bearer ") == 0) {
+                        token = authHeader.substr(7);
+                    }
+                }
+
+                if (token.empty()) {
+                    response["error"] = "No token provided";
+                    status = 401;
+                }
+                else {
                     std::lock_guard<std::mutex> lock(mtx);
 
                     if (sessions.find(token) != sessions.end()) {
@@ -150,14 +192,10 @@ void handleClient(SOCKET clientSocket) {
                         response["error"] = "Invalid token";
                         status = 401;
                     }
-
-                }
-                else {
-                    response["error"] = "No token provided";
-                    status = 401;
                 }
             }
 
+            // ========== NOT FOUND ==========
             else {
                 response["error"] = "Not Found";
                 status = 404;
@@ -176,6 +214,7 @@ void handleClient(SOCKET clientSocket) {
     closesocket(clientSocket);
 }
 
+// ================= MAIN =================
 int main() {
 
     WSADATA wsaData;
