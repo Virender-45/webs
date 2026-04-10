@@ -138,7 +138,8 @@ void handleClient(SOCKET clientSocket) {
                 if (requestStr.find("Authorization: Bearer ") != std::string::npos) {
 
                     size_t pos = requestStr.find("Authorization: Bearer ") + 22;
-                    std::string token = requestStr.substr(pos, 20);
+                    size_t end = requestStr.find("\r\n", pos);
+                    std::string token = requestStr.substr(pos, end - pos);
 
                     std::lock_guard<std::mutex> lock(mtx);
 
@@ -178,7 +179,7 @@ void handleClient(SOCKET clientSocket) {
 int main() {
 
     WSADATA wsaData;
-    //WSAStartup(MAKEWORD(2, 2), &wsaData);
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
 
     SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -190,7 +191,7 @@ int main() {
     bind(serverSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
     listen(serverSocket, SOMAXCONN);
 
-    std::cout << "🚀 API Server running on http://localhost:54000\n";
+    std::cout << "API Server running on http://localhost:54000\n";
 
     while (true) {
         SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
