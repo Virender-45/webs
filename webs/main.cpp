@@ -50,6 +50,9 @@ void handleClient(SOCKET clientSocket, std::string clientIP) {
 
 int main() {
 
+    initLogger();
+    logInfo("Server starting...");
+
     WSADATA wsaData;
     //WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
