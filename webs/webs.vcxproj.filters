@@ -18,16 +18,19 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="http_parse.cpp">
+    <ClCompile Include="auth\auth.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router.cpp">
+    <ClCompile Include="core\router.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="auth.cpp">
+    <ClCompile Include="db\database.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="database.cpp">
+    <ClCompile Include="http\parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\response.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

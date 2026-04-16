@@ -3,5 +3,12 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="webs/auth/auth.cpp" />
+    <File Path="webs/core/router.cpp" />
+    <File Path="webs/db/database.cpp" />
+    <File Path="webs/http/parser.cpp" />
+    <File Path="webs/utils/response.cpp" />
+  </Folder>
   <Project Path="webs/webs.vcxproj" Id="d05641bf-c968-4782-b17f-28f22b107aac" />
 </Solution>
