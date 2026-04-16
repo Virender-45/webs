@@ -1,5 +1,5 @@
 #pragma once
-#include <winsock2.h>
-#include "parser.h"
+#include "../http/parserr.h"
+#include "../json.hpp"
 
-void handleClient(SOCKET clientSocket);
+nlohmann::json handleRoute(const HttpRequest& req, int& status);

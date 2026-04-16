@@ -2,13 +2,38 @@
 
 #include <iostream>
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #include <thread>
+
+#include "http/parserr.h"
 #include "core/router.h"
+#include "utils/response.h"
+
+void handleClient(SOCKET clientSocket) {
+
+    char buffer[4096] = { 0 };
+    int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+
+    if (bytesReceived > 0) {
+
+        std::string requestStr(buffer, bytesReceived);
+
+        HttpRequest req = parseRequest(requestStr);
+
+        int status = 200;
+        nlohmann::json response = handleRoute(req, status);
+
+        std::string httpResponse = createResponse(response, status);
+        send(clientSocket, httpResponse.c_str(), httpResponse.size(), 0);
+    }
+
+    closesocket(clientSocket);
+}
 
 int main() {
 
     WSADATA wsaData;
-    //WSAStartup(MAKEWORD(2, 2), &wsaData);
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         std::cout << "WSAStartup failed\n";
         return 1;
@@ -28,7 +53,6 @@ int main() {
 
     while (true) {
         SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
-
         std::thread t(handleClient, clientSocket);
         t.detach();
     }
