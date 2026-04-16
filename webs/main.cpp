@@ -33,7 +33,7 @@ void handleClient(SOCKET clientSocket) {
 int main() {
 
     WSADATA wsaData;
-    WSAStartup(MAKEWORD(2, 2), &wsaData);
+    //WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         std::cout << "WSAStartup failed\n";
         return 1;

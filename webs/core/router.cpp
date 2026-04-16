@@ -1,6 +1,7 @@
 #include "router.h"
 #include "../db/database.h"
 #include "../auth/auth.h"
+#include "../utils/validation.h"
 
 using json = nlohmann::json;
 
@@ -9,10 +10,28 @@ json handleRoute(const HttpRequest& req, int& status) {
     json response;
 
     try {
-        json body = req.body.empty() ? json{} : json::parse(req.body);
+        json body;
+
+        if (!req.body.empty()) {
+            try {
+                body = json::parse(req.body);
+            }
+            catch (...) {
+                response["error"] = "Invalid JSON format";
+                status = 400;
+                return response;
+            }
+        }
 
         // REGISTER
         if (req.path == "/users" && req.method == "POST") {
+
+            std::string error;
+            if (!validateUserInput(body, error)) {
+                response["error"] = error;
+                status = 400;
+                return response;
+            }
 
             std::lock_guard<std::mutex> lock(mtx);
 

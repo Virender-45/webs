@@ -133,6 +133,7 @@
     <ClCompile Include="http\parser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utils\response.cpp" />
+    <ClCompile Include="utils\validation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp" />

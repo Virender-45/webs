@@ -11,6 +11,18 @@ json loginUser(const json& body, int& status) {
 
     json response;
 
+    if (!body.contains("username") || !body.contains("password")) {
+        response["error"] = "Missing username or password";
+        status = 400;
+        return response;
+    }
+
+    if (!body["username"].is_string() || !body["password"].is_string()) {
+        response["error"] = "Invalid input types";
+        status = 400;
+        return response;
+    }
+
     std::string username = body["username"];
     std::string password = body["password"];
 
