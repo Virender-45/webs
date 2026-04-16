@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="auth\auth.cpp" />
     <ClCompile Include="core\router.cpp" />
+    <ClCompile Include="core\threadpool.cpp" />
     <ClCompile Include="db\database.cpp" />
     <ClCompile Include="http\parser.cpp" />
     <ClCompile Include="main.cpp" />
@@ -137,7 +138,15 @@
     <ClCompile Include="utils\validation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="auth\auth.h" />
+    <ClInclude Include="core\router.h" />
+    <ClInclude Include="core\threadpool.h" />
+    <ClInclude Include="db\database.h" />
+    <ClInclude Include="http\parserr.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="utils\hash.h" />
+    <ClInclude Include="utils\response.h" />
+    <ClInclude Include="utils\validation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

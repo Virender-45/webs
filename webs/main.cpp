@@ -8,6 +8,7 @@
 #include "http/parserr.h"
 #include "core/router.h"
 #include "utils/response.h"
+#include "core/threadpool.h"
 
 void handleClient(SOCKET clientSocket) {
 
@@ -51,11 +52,25 @@ int main() {
 
     std::cout << "Server running on http://localhost:54000\n";
 
+    ThreadPool pool(4); // 4 worker threads
+
     while (true) {
+
         SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
-        std::thread t(handleClient, clientSocket);
-        t.detach();
+
+        if (clientSocket == INVALID_SOCKET) {
+            std::cout << "Accept failed\n";
+            continue;
+        }
+
+        pool.enqueue(clientSocket);
     }
+
+    //while (true) {
+      //  SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
+        //std::thread t(handleClient, clientSocket);
+        //t.detach();
+    //}
 
     closesocket(serverSocket);
     WSACleanup();

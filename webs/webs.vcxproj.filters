@@ -39,9 +39,36 @@
     <ClCompile Include="utils\hash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="core\threadpool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\router.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\threadpool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="auth\auth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="db\database.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http\parserr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\hash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\validation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
