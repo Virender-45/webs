@@ -9,6 +9,7 @@
 #include "core/router.h"
 #include "utils/response.h"
 #include "core/threadpool.h"
+#include "utils/logger.h"
 
 void handleClient(SOCKET clientSocket) {
 
@@ -18,8 +19,9 @@ void handleClient(SOCKET clientSocket) {
     if (bytesReceived > 0) {
 
         std::string requestStr(buffer, bytesReceived);
-
+        
         HttpRequest req = parseRequest(requestStr);
+        logInfo(req.method + " " + req.path);
 
         int status = 200;
         nlohmann::json response = handleRoute(req, status);
@@ -50,13 +52,14 @@ int main() {
     bind(serverSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
     listen(serverSocket, SOMAXCONN);
 
-    std::cout << "Server running on http://localhost:54000\n";
+    logInfo("Server started on port 54000");
 
     ThreadPool pool(4); // 4 worker threads
 
     while (true) {
 
         SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
+        logInfo("New client connected");
 
         if (clientSocket == INVALID_SOCKET) {
             std::cout << "Accept failed\n";

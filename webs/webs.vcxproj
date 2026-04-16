@@ -134,6 +134,7 @@
     <ClCompile Include="http\parser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utils\hash.cpp" />
+    <ClCompile Include="utils\logger.cpp" />
     <ClCompile Include="utils\response.cpp" />
     <ClCompile Include="utils\validation.cpp" />
   </ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="http\parserr.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="utils\hash.h" />
+    <ClInclude Include="utils\logger.h" />
     <ClInclude Include="utils\response.h" />
     <ClInclude Include="utils\validation.h" />
   </ItemGroup>
