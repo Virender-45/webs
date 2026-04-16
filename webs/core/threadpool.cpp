@@ -1,7 +1,7 @@
 #include "threadpool.h"
 #include <iostream>
 
-extern void handleClient(SOCKET clientSocket);
+extern void handleClient(SOCKET clientSocket, std::string clientIP);
 
 ThreadPool::ThreadPool(int numThreads) : stop(false) {
 
@@ -14,30 +14,31 @@ void ThreadPool::worker() {
 
     while (true) {
 
-        SOCKET clientSocket;
+        std::pair<SOCKET, std::string> task;
 
         {
             std::unique_lock<std::mutex> lock(mtx);
 
             cv.wait(lock, [this]() {
                 return stop || !tasks.empty();
-            });
+                });
 
             if (stop && tasks.empty()) return;
 
-            clientSocket = tasks.front();
+            task = tasks.front();
             tasks.pop();
         }
 
-        handleClient(clientSocket);
+        handleClient(task.first, task.second);
     }
 }
 
-void ThreadPool::enqueue(SOCKET clientSocket) {
+void ThreadPool::enqueue(SOCKET clientSocket, const std::string& ip) {
 
     {
         std::lock_guard<std::mutex> lock(mtx);
-        tasks.push(clientSocket);
+
+        tasks.push({ clientSocket, ip });
     }
 
     cv.notify_one();

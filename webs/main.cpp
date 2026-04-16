@@ -10,8 +10,23 @@
 #include "utils/response.h"
 #include "core/threadpool.h"
 #include "utils/logger.h"
+#include "core/ratelimiter.h"
 
-void handleClient(SOCKET clientSocket) {
+void handleClient(SOCKET clientSocket, std::string clientIP) {
+
+    if (isRateLimited(clientIP)) {
+
+        logError("Rate limit exceeded for IP: " + clientIP);
+
+        std::string response =
+            "HTTP/1.1 429 Too Many Requests\r\n"
+            "Content-Type: application/json\r\n\r\n"
+            "{\"error\":\"Too many requests\"}";
+
+        send(clientSocket, response.c_str(), response.size(), 0);
+        closesocket(clientSocket);
+        return;
+    }
 
     char buffer[4096] = { 0 };
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
@@ -58,15 +73,17 @@ int main() {
 
     while (true) {
 
-        SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
-        logInfo("New client connected");
+        sockaddr_in clientAddr;
+        int addrSize = sizeof(clientAddr);
 
-        if (clientSocket == INVALID_SOCKET) {
-            std::cout << "Accept failed\n";
-            continue;
-        }
+        SOCKET clientSocket = accept(serverSocket, (sockaddr*)&clientAddr, &addrSize);
 
-        pool.enqueue(clientSocket);
+        char ipStr[INET_ADDRSTRLEN];
+        inet_ntop(AF_INET, &clientAddr.sin_addr, ipStr, sizeof(ipStr));
+
+        std::string clientIP = ipStr;
+
+        pool.enqueue(clientSocket, clientIP);
     }
 
     //while (true) {

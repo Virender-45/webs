@@ -9,7 +9,7 @@
 class ThreadPool {
 private:
     std::vector<std::thread> workers;
-    std::queue<SOCKET> tasks;
+    std::queue<std::pair<SOCKET, std::string>> tasks;
 
     std::mutex mtx;
     std::condition_variable cv;
@@ -21,5 +21,5 @@ public:
     ThreadPool(int numThreads);
     ~ThreadPool();
 
-    void enqueue(SOCKET clientSocket);
+    void enqueue(SOCKET clientSocket, const std::string& ip);
 };
