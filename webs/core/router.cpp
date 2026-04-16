@@ -2,6 +2,7 @@
 #include "../db/database.h"
 #include "../auth/auth.h"
 #include "../utils/validation.h"
+#include "../utils/hash.h"
 
 using json = nlohmann::json;
 
@@ -35,7 +36,9 @@ json handleRoute(const HttpRequest& req, int& status) {
 
             std::lock_guard<std::mutex> lock(mtx);
 
-            User newUser{ body["username"], body["password"] };
+            std::string hashedPassword = hashPassword(body["password"]);
+
+            User newUser{ body["username"], hashedPassword };
             users.push_back(newUser);
 
             response["message"] = "User created";

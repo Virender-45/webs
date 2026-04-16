@@ -132,6 +132,7 @@
     <ClCompile Include="db\database.cpp" />
     <ClCompile Include="http\parser.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utils\hash.cpp" />
     <ClCompile Include="utils\response.cpp" />
     <ClCompile Include="utils\validation.cpp" />
   </ItemGroup>

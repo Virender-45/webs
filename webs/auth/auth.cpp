@@ -1,10 +1,11 @@
 #include "auth.h"
 #include "../db/database.h"
+#include "../utils/hash.h"
 
 using json = nlohmann::json;
 
 std::string generateToken(const std::string& username) {
-    return username + "_token";
+    return generateRandomToken();
 }
 
 json loginUser(const json& body, int& status) {
@@ -26,13 +27,16 @@ json loginUser(const json& body, int& status) {
     std::string username = body["username"];
     std::string password = body["password"];
 
+    // HASH INPUT PASSWORD
+    std::string hashedInput = hashPassword(password);
+
     bool found = false;
 
     {
         std::lock_guard<std::mutex> lock(mtx);
 
         for (auto& user : users) {
-            if (user.username == username && user.password == password) {
+            if (user.username == username && user.password == hashedInput) {
                 found = true;
                 break;
             }
@@ -47,7 +51,8 @@ json loginUser(const json& body, int& status) {
             sessions[token] = username;
         }
 
-        response["token"] = token;
+        response["access_token"] = token;
+        response["token_type"] = "Bearer";
     }
     else {
         response["error"] = "Invalid credentials";
