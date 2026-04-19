@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="auth\auth.cpp" />
+    <ClCompile Include="core\middleware.cpp" />
     <ClCompile Include="core\ratelimiter.cpp" />
     <ClCompile Include="core\router.cpp" />
     <ClCompile Include="core\threadpool.cpp" />
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="auth\auth.h" />
+    <ClInclude Include="core\middleware.h" />
     <ClInclude Include="core\ratelimiter.h" />
     <ClInclude Include="core\router.h" />
     <ClInclude Include="core\threadpool.h" />

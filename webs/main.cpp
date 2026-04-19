@@ -11,22 +11,13 @@
 #include "core/threadpool.h"
 #include "utils/logger.h"
 #include "core/ratelimiter.h"
+#include "core/middleware.h"
 
+// GLOBAL MIDDLEWARE MANAGER
+MiddlewareManager middlewareManager;
+
+// ================= CLIENT HANDLER =================
 void handleClient(SOCKET clientSocket, std::string clientIP) {
-
-    if (isRateLimited(clientIP)) {
-
-        logError("Rate limit exceeded for IP: " + clientIP);
-
-        std::string response =
-            "HTTP/1.1 429 Too Many Requests\r\n"
-            "Content-Type: application/json\r\n\r\n"
-            "{\"error\":\"Too many requests\"}";
-
-        send(clientSocket, response.c_str(), response.size(), 0);
-        closesocket(clientSocket);
-        return;
-    }
 
     char buffer[4096] = { 0 };
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
@@ -34,12 +25,26 @@ void handleClient(SOCKET clientSocket, std::string clientIP) {
     if (bytesReceived > 0) {
 
         std::string requestStr(buffer, bytesReceived);
-        
-        HttpRequest req = parseRequest(requestStr);
-        logInfo(req.method + " " + req.path);
 
+        HttpRequest req = parseRequest(requestStr);
+
+        // Attach IP for middleware usage
+        req.headers["x-forwarded-for"] = clientIP;
+
+        nlohmann::json response;
         int status = 200;
-        nlohmann::json response = handleRoute(req, status);
+
+        // RUN MIDDLEWARE
+        if (!middlewareManager.execute(req, response, status)) {
+
+            std::string httpResponse = createResponse(response, status);
+            send(clientSocket, httpResponse.c_str(), httpResponse.size(), 0);
+            closesocket(clientSocket);
+            return;
+        }
+
+        // ROUTING
+        response = handleRoute(req, status);
 
         std::string httpResponse = createResponse(response, status);
         send(clientSocket, httpResponse.c_str(), httpResponse.size(), 0);
@@ -48,13 +53,13 @@ void handleClient(SOCKET clientSocket, std::string clientIP) {
     closesocket(clientSocket);
 }
 
+// ================= MAIN =================
 int main() {
 
     initLogger();
     logInfo("Server starting...");
 
     WSADATA wsaData;
-    //WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         std::cout << "WSAStartup failed\n";
         return 1;
@@ -72,14 +77,60 @@ int main() {
 
     logInfo("Server started on port 54000");
 
-    ThreadPool pool(4); // 4 worker threads
+    // ================= MIDDLEWARE REGISTRATION =================
 
+    // Logging Middleware
+    middlewareManager.use([](HttpRequest& req, nlohmann::json& res, int& status) {
+        logInfo(req.method + " " + req.path);
+        return true;
+        });
+
+    // Auth Middleware
+    middlewareManager.use([](HttpRequest& req, nlohmann::json& res, int& status) {
+
+        if (req.path == "/profile") {
+
+            if (req.headers.find("authorization") == req.headers.end()) {
+                res["error"] = "Unauthorized";
+                status = 401;
+                return false;
+            }
+        }
+
+        return true;
+        });
+
+    // Rate Limiter Middleware
+    middlewareManager.use([](HttpRequest& req, nlohmann::json& res, int& status) {
+
+        std::string ip = req.headers.count("x-forwarded-for")
+            ? req.headers["x-forwarded-for"]
+            : "unknown";
+
+        if (isRateLimited(ip)) {
+            res["error"] = "Too many requests";
+            status = 429;
+            return false;
+        }
+
+        return true;
+        });
+
+    // ================= THREAD POOL =================
+    ThreadPool pool(4);
+
+    // ================= SERVER LOOP =================
     while (true) {
 
         sockaddr_in clientAddr;
         int addrSize = sizeof(clientAddr);
 
         SOCKET clientSocket = accept(serverSocket, (sockaddr*)&clientAddr, &addrSize);
+
+        if (clientSocket == INVALID_SOCKET) {
+            logError("Accept failed");
+            continue;
+        }
 
         char ipStr[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &clientAddr.sin_addr, ipStr, sizeof(ipStr));
@@ -88,12 +139,6 @@ int main() {
 
         pool.enqueue(clientSocket, clientIP);
     }
-
-    //while (true) {
-      //  SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
-        //std::thread t(handleClient, clientSocket);
-        //t.detach();
-    //}
 
     closesocket(serverSocket);
     WSACleanup();
