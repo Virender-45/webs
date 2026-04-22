@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Programming — Virender Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/_page.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">VS<span class="logo-dot">.</span></div>
+    <a href="../index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+  </div>
+</header>
+
+<section class="page-hero" data-letter="C">
+  <div class="hero-inner">
+    <div class="hero-icon">⚙️</div>
+    <div class="page-tag">Skill Deep-Dive</div>
+    <h1>C++ Programming</h1>
+    <p class="lead">Building efficient, memory-aware programs using C++ — from data structures and algorithms to object-oriented design patterns.</p>
+  </div>
+</section>
+
+<div class="page-content">
+
+  <div class="two-col fade-up">
+    <div>
+      <div class="section-label">Overview</div>
+      <h2 class="section-title">The Foundation of Computational Thinking</h2>
+      <p class="section-body">C++ taught me how computers actually work — memory management, pointers, stack vs heap, and performance trade-offs. This understanding makes me a better developer in every language I use.</p>
+      <p class="section-body">Through my BCA program and personal practice, I've implemented core data structures from scratch and solved algorithmic problems using C++.</p>
+      <div class="tags">
+        <span class="tag">OOP</span><span class="tag">STL</span><span class="tag">Pointers</span>
+        <span class="tag">DSA</span><span class="tag">Templates</span><span class="tag">Memory Management</span>
+      </div>
+    </div>
+    <div>
+      <div class="section-label">Proficiency</div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">C++ Core Language</span><span class="skill-pct">75%</span></div><div class="bar-track"><div class="bar-fill" data-w="75%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">OOP Concepts</span><span class="skill-pct">78%</span></div><div class="bar-track"><div class="bar-fill" data-w="78%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Data Structures</span><span class="skill-pct">70%</span></div><div class="bar-track"><div class="bar-fill" data-w="70%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">STL Containers</span><span class="skill-pct">65%</span></div><div class="bar-track"><div class="bar-fill" data-w="65%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Code Sample</div>
+  <h2 class="section-title fade-up">OOP in C++</h2>
+  <div class="code-block fade-up">
+<span class="kw">class</span> <span class="fn">Student</span> {
+<span class="kw">private</span>:
+  std::string name;
+  <span class="kw">int</span> rollNo;
+  <span class="kw">double</span> cgpa;
+
+<span class="kw">public</span>:
+  <span class="fn">Student</span>(std::string n, <span class="kw">int</span> r, <span class="kw">double</span> c)
+    : name(n), rollNo(r), cgpa(c) {}
+
+  <span class="kw">void</span> <span class="fn">display</span>() <span class="kw">const</span> {
+    std::cout &lt;&lt; <span class="str">"Name: "</span> &lt;&lt; name
+              &lt;&lt; <span class="str">" | CGPA: "</span> &lt;&lt; cgpa &lt;&lt; std::endl;
+  }
+
+  <span class="kw">bool</span> <span class="fn">isDistinction</span>() <span class="kw">const</span> { <span class="kw">return</span> cgpa &gt;= <span class="str">8.5</span>; }
+};
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Topics Covered</div>
+  <h2 class="section-title fade-up">What I Know</h2>
+  <div class="cards-grid">
+    <div class="card fade-up"><div class="card-icon">🧱</div><h3>OOP Pillars</h3><p>Classes, objects, inheritance, polymorphism, encapsulation, and abstraction with real examples.</p></div>
+    <div class="card fade-up"><div class="card-icon">📚</div><h3>Data Structures</h3><p>Linked lists, stacks, queues, trees, and graphs — built and traversed from scratch.</p></div>
+    <div class="card fade-up"><div class="card-icon">⚡</div><h3>Algorithms</h3><p>Sorting (bubble, merge, quick), searching (binary), and basic graph algorithms (BFS, DFS).</p></div>
+    <div class="card fade-up"><div class="card-icon">🗃️</div><h3>STL</h3><p>vector, map, set, unordered_map — choosing the right container for performance.</p></div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">VS<span class="logo-dot">.</span></div>
+    <p class="footer-copy">&copy; 2025 Virender Singh. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../js/_shared.js"></script>
+<script>
+  const fills = document.querySelectorAll('.bar-fill');
+  const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ e.target.style.width = e.target.dataset.w; io.unobserve(e.target); } }); }, {threshold:0.3});
+  fills.forEach(f => io.observe(f));
+  const fades = document.querySelectorAll('.fade-up');
+  const fo = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); fo.unobserve(e.target); } }); }, {threshold:0.1});
+  fades.forEach(f => fo.observe(f));
+</script>
+</body>
+</html>

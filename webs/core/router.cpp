@@ -3,6 +3,7 @@
 #include "../auth/auth.h"
 #include "../utils/validation.h"
 #include "../utils/hash.h"
+#include "../core/static.h"
 
 using json = nlohmann::json;
 
@@ -23,6 +24,22 @@ json handleRoute(const HttpRequest& req, int& status) {
                 return response;
             }
         }
+
+        // STATIC FILE HANDLER
+        if (req.method == "GET") {
+
+            std::string contentType;
+            std::string content = serveStaticFile(req.path, contentType, status);
+
+            if (status == 200) {
+                json res;
+                res["__raw__"] = content;
+                res["contentType"] = contentType;
+                return res;
+            }
+        }
+
+        // ================= API ROUTES =================
 
         // REGISTER
         if (req.path == "/users" && req.method == "POST") {

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Testing — Virender Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/_page.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">VS<span class="logo-dot">.</span></div>
+    <a href="../index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+  </div>
+</header>
+
+<section class="page-hero" data-letter="T">
+  <div class="hero-inner">
+    <div class="hero-icon">🧪</div>
+    <div class="page-tag">Skill Deep-Dive</div>
+    <h1>Software Testing</h1>
+    <p class="lead">Hands-on QA experience from my internship — manual testing, bug tracking, test case writing, and quality assurance workflows in a professional environment.</p>
+  </div>
+</section>
+
+<div class="page-content">
+
+  <div class="two-col fade-up">
+    <div>
+      <div class="section-label">Experience</div>
+      <h2 class="section-title">Quality is a Feature, Not an Afterthought</h2>
+      <p class="section-body">During my internship at Oxeen IT Pro Solutions, I participated in the full testing lifecycle — writing test cases, executing them against live builds, logging defects, and verifying fixes. This gave me first-hand experience of how professional QA integrates with development teams.</p>
+      <p class="section-body">Testing changed how I write code: I now think about edge cases, invalid inputs, and failure modes before I even start implementing a feature.</p>
+    </div>
+    <div>
+      <div class="section-label">Types of Testing I've Done</div>
+      <div class="cards-grid" style="margin:0">
+        <div class="card" style="padding:20px 18px"><div class="card-icon" style="font-size:1.2rem;margin-bottom:8px">🖱️</div><h3>Manual Testing</h3><p>Exploratory and scripted testing of web UIs across browsers.</p></div>
+        <div class="card" style="padding:20px 18px"><div class="card-icon" style="font-size:1.2rem;margin-bottom:8px">📋</div><h3>Test Cases</h3><p>Writing structured test cases with steps, expected vs actual results.</p></div>
+        <div class="card" style="padding:20px 18px"><div class="card-icon" style="font-size:1.2rem;margin-bottom:8px">🐛</div><h3>Bug Reports</h3><p>Logging defects with reproduction steps, severity, and screenshots.</p></div>
+        <div class="card" style="padding:20px 18px"><div class="card-icon" style="font-size:1.2rem;margin-bottom:8px">✅</div><h3>Regression</h3><p>Re-testing fixed bugs to confirm resolution without new breakage.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Test Case Example</div>
+  <h2 class="section-title fade-up">How I Write Test Cases</h2>
+  <div class="code-block fade-up">
+<span class="cm">Test Case ID: TC-LOGIN-003</span>
+<span class="cm">Module: User Authentication</span>
+<span class="cm">Title: Login with invalid email format</span>
+
+<span class="kw">Preconditions:</span>
+  - User is on the login page
+  - Application is running
+
+<span class="kw">Steps:</span>
+  1. Enter <span class="str">"notanemail"</span> in the Email field
+  2. Enter any password in the Password field
+  3. Click the Login button
+
+<span class="kw">Expected Result:</span>
+  - <span class="fn">Validation error</span>: "Please enter a valid email address"
+  - Form is NOT submitted
+
+<span class="kw">Actual Result:</span> <span class="str">✅ PASS — error displayed as expected</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Testing Mindset</div>
+  <h2 class="section-title fade-up">What Good Testing Looks Like</h2>
+  <div class="cards-grid">
+    <div class="card fade-up"><div class="card-icon">🎯</div><h3>Edge Cases First</h3><p>Empty inputs, maximum lengths, special characters, concurrent actions — the corners that break things.</p></div>
+    <div class="card fade-up"><div class="card-icon">🌐</div><h3>Cross-Browser</h3><p>Chrome, Firefox, Safari — same functionality, consistent rendering, no silent failures.</p></div>
+    <div class="card fade-up"><div class="card-icon">📱</div><h3>Responsive Check</h3><p>Every UI tested at mobile, tablet, and desktop breakpoints using DevTools.</p></div>
+    <div class="card fade-up"><div class="card-icon">🔁</div><h3>Regression Cycle</h3><p>Every bug fix is followed by a regression pass to catch unintended side-effects.</p></div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">VS<span class="logo-dot">.</span></div>
+    <p class="footer-copy">&copy; 2025 Virender Singh. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../js/_shared.js"></script>
+<script>
+  const fades = document.querySelectorAll('.fade-up');
+  const fo = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); fo.unobserve(e.target); } }); }, {threshold:0.1});
+  fades.forEach(f => fo.observe(f));
+</script>
+</body>
+</html>

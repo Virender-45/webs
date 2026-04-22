@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frontend Development — Virender Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/_page.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">VS<span class="logo-dot">.</span></div>
+    <a href="../index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+  </div>
+</header>
+
+<section class="page-hero" data-letter="F">
+  <div class="hero-inner">
+    <div class="hero-icon">🌐</div>
+    <div class="page-tag">Skill Deep-Dive</div>
+    <h1>Frontend Development</h1>
+    <p class="lead">Crafting responsive, accessible, and visually polished user interfaces using modern web standards — HTML, CSS, Bootstrap & JavaScript.</p>
+  </div>
+</section>
+
+<div class="page-content">
+
+  <div class="two-col fade-up">
+    <div>
+      <div class="section-label">Overview</div>
+      <h2 class="section-title">Building the Web, Pixel by Pixel</h2>
+      <p class="section-body">Frontend development is where design meets engineering. I focus on translating wireframes and ideas into live, interactive experiences — making sure every element is precisely placed, every interaction feels smooth, and every layout works from a 320px phone to a 4K monitor.</p>
+      <p class="section-body">My approach prioritises semantic HTML for accessibility, clean modular CSS, and progressive enhancement so the core experience works everywhere.</p>
+      <div class="tags">
+        <span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">JavaScript</span>
+        <span class="tag">Bootstrap 5</span><span class="tag">Flexbox</span><span class="tag">CSS Grid</span>
+        <span class="tag">Responsive</span><span class="tag">Accessibility</span>
+      </div>
+    </div>
+    <div>
+      <div class="section-label">Proficiency</div>
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;margin-bottom:20px;color:var(--text-head)">Core Technologies</h3>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">HTML / CSS</span><span class="skill-pct">90%</span></div><div class="bar-track"><div class="bar-fill" data-w="90%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">JavaScript</span><span class="skill-pct">72%</span></div><div class="bar-track"><div class="bar-fill" data-w="72%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Bootstrap</span><span class="skill-pct">85%</span></div><div class="bar-track"><div class="bar-fill" data-w="85%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Responsive Design</span><span class="skill-pct">88%</span></div><div class="bar-track"><div class="bar-fill" data-w="88%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">What I Build</div>
+  <h2 class="section-title fade-up">Core Capabilities</h2>
+  <div class="cards-grid">
+    <div class="card fade-up">
+      <div class="card-icon">📐</div>
+      <h3>Semantic Structure</h3>
+      <p>Proper use of HTML5 elements — articles, sections, nav, aside — for meaning, SEO, and screen readers.</p>
+    </div>
+    <div class="card fade-up">
+      <div class="card-icon">🎨</div>
+      <h3>CSS Architecture</h3>
+      <p>Organised stylesheets using BEM methodology, custom properties, and scalable patterns that don't become spaghetti at scale.</p>
+    </div>
+    <div class="card fade-up">
+      <div class="card-icon">⚡</div>
+      <h3>Interactive JS</h3>
+      <p>DOM manipulation, event handling, fetch API, form validation, and smooth animations — without heavy frameworks when not needed.</p>
+    </div>
+    <div class="card fade-up">
+      <div class="card-icon">📱</div>
+      <h3>Cross-Device Testing</h3>
+      <p>Manual and DevTools-based testing across breakpoints, browsers, and operating systems for consistent experiences.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Code Sample</div>
+  <h2 class="section-title fade-up">Typical Workflow</h2>
+  <div class="code-block fade-up">
+<span class="cm">/* Mobile-first responsive card component */</span>
+<span class="kw">.card</span> {
+  <span class="fn">display</span>: flex;
+  <span class="fn">flex-direction</span>: column;
+  <span class="fn">padding</span>: <span class="str">24px</span>;
+  <span class="fn">border-radius</span>: <span class="str">var(--radius)</span>;
+  <span class="fn">background</span>: <span class="str">var(--bg-card)</span>;
+  <span class="fn">transition</span>: <span class="str">transform 0.28s ease</span>;
+}
+
+<span class="cm">/* Tablet and up */</span>
+<span class="kw">@media (min-width: 768px)</span> {
+  <span class="kw">.card-grid</span> {
+    <span class="fn">display</span>: grid;
+    <span class="fn">grid-template-columns</span>: <span class="str">repeat(auto-fit, minmax(260px, 1fr))</span>;
+    <span class="fn">gap</span>: <span class="str">24px</span>;
+  }
+}
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Learning Path</div>
+  <h2 class="section-title fade-up">How I Got Here</h2>
+  <div class="timeline fade-up">
+    <div class="tl-item"><h4>2021 — BCA Starts</h4><p>First encounter with HTML & CSS. Built static pages for assignments.</p></div>
+    <div class="tl-item"><h4>2022 — JavaScript & Bootstrap</h4><p>Added interactivity, learned responsive frameworks, built first multi-page site.</p></div>
+    <div class="tl-item"><h4>2024 — Internship at Oxeen IT Pro</h4><p>Real-world projects — WordPress themes, custom PHP pages, cross-browser testing.</p></div>
+    <div class="tl-item"><h4>2025 — MCA & Beyond</h4><p>Deepening JS, exploring React, building this portfolio from scratch.</p></div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">VS<span class="logo-dot">.</span></div>
+    <p class="footer-copy">&copy; 2025 Virender Singh. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../js/_shared.js"></script>
+<script>
+  // Animate bars on scroll
+  const fills = document.querySelectorAll('.bar-fill');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.style.width = e.target.dataset.w; io.unobserve(e.target); } });
+  }, {threshold:0.3});
+  fills.forEach(f => io.observe(f));
+
+  // Fade-up
+  const fades = document.querySelectorAll('.fade-up');
+  const fo = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); fo.unobserve(e.target); } });
+  }, {threshold:0.1});
+  fades.forEach(f => fo.observe(f));
+</script>
+</body>
+</html>

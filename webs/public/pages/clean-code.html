@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clean Code Practices — Virender Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/_page.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">VS<span class="logo-dot">.</span></div>
+    <a href="../index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+  </div>
+</header>
+
+<section class="page-hero" data-letter="C">
+  <div class="hero-inner">
+    <div class="hero-icon">&lt;/&gt;</div>
+    <div class="page-tag">Skill Deep-Dive</div>
+    <h1>Clean Code Practices</h1>
+    <p class="lead">Writing code that future-you (and your teammates) will actually thank you for — readable, consistent, and built to last.</p>
+  </div>
+</section>
+
+<div class="page-content">
+
+  <div class="two-col fade-up">
+    <div>
+      <div class="section-label">Philosophy</div>
+      <h2 class="section-title">Code is Read More Than Written</h2>
+      <p class="section-body">Clean code isn't a luxury — it's respect for everyone who touches the codebase after you. I follow naming conventions, keep functions small and purposeful, and avoid "clever" tricks that obscure intent.</p>
+      <p class="section-body">I believe documentation should exist in the code itself: descriptive names, logical structure, and self-evident logic reduce the need for excessive comments.</p>
+    </div>
+    <div>
+      <div class="section-label">Principles I Follow</div>
+      <div class="cards-grid" style="margin:0">
+        <div class="card" style="padding:20px 18px">
+          <div class="card-icon" style="font-size:1.2rem;margin-bottom:8px">📌</div>
+          <h3>DRY</h3><p>Don't Repeat Yourself — extract reusable logic.</p>
+        </div>
+        <div class="card" style="padding:20px 18px">
+          <div class="card-icon" style="font-size:1.2rem;margin-bottom:8px">🎯</div>
+          <h3>KISS</h3><p>Keep It Simple, Stupid — prefer clarity over cleverness.</p>
+        </div>
+        <div class="card" style="padding:20px 18px">
+          <div class="card-icon" style="font-size:1.2rem;margin-bottom:8px">🔧</div>
+          <h3>SRP</h3><p>Single Responsibility — one function, one job.</p>
+        </div>
+        <div class="card" style="padding:20px 18px">
+          <div class="card-icon" style="font-size:1.2rem;margin-bottom:8px">🧪</div>
+          <h3>Testable</h3><p>Write code that's easy to verify and debug.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Before & After</div>
+  <h2 class="section-title fade-up">Refactoring in Practice</h2>
+
+  <p class="section-body fade-up" style="margin-bottom:8px"><strong style="color:var(--text-head)">❌ Before — messy, unclear intent:</strong></p>
+  <div class="code-block fade-up">
+<span class="kw">function</span> <span class="fn">x</span>(a, b) {
+  <span class="kw">let</span> r = <span class="str">0</span>;
+  <span class="kw">for</span>(<span class="kw">let</span> i=<span class="str">0</span>; i&lt;a.length; i++) {
+    <span class="kw">if</span>(a[i] &gt; b) r++;
+  }
+  <span class="kw">return</span> r;
+}
+  </div>
+
+  <p class="section-body fade-up" style="margin-bottom:8px"><strong style="color:var(--text-head)">✅ After — self-documenting, purposeful:</strong></p>
+  <div class="code-block fade-up">
+<span class="cm">// Count how many scores exceed the passing threshold</span>
+<span class="kw">function</span> <span class="fn">countPassingScores</span>(scores, passingThreshold) {
+  <span class="kw">return</span> scores.<span class="fn">filter</span>(score => score &gt; passingThreshold).length;
+}
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">My Toolkit</div>
+  <h2 class="section-title fade-up">Tools That Help Me Stay Clean</h2>
+  <div class="cards-grid">
+    <div class="card fade-up"><div class="card-icon">🔍</div><h3>Code Reviews</h3><p>Reviewing others' code and welcoming reviews of my own — the fastest way to grow.</p></div>
+    <div class="card fade-up"><div class="card-icon">📏</div><h3>Consistent Formatting</h3><p>Tabs vs spaces decided once, indentation levels consistent, trailing commas where appropriate.</p></div>
+    <div class="card fade-up"><div class="card-icon">📝</div><h3>Meaningful Commits</h3><p>Descriptive Git commit messages that explain the "why", not just the "what".</p></div>
+    <div class="card fade-up"><div class="card-icon">🗂️</div><h3>Folder Structure</h3><p>Organised project structure where any dev can find any file without asking.</p></div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-label fade-up">Habits</div>
+  <h2 class="section-title fade-up">Daily Practices</h2>
+  <div class="timeline fade-up">
+    <div class="tl-item"><h4>Name things honestly</h4><p>If a variable is hard to name, the logic might be too complex — simplify first.</p></div>
+    <div class="tl-item"><h4>Refactor before shipping</h4><p>Never leave "I'll clean this up later" in the codebase. Later never comes.</p></div>
+    <div class="tl-item"><h4>Comment the why, not the what</h4><p>The code says what it does. Comments explain edge cases and business logic.</p></div>
+    <div class="tl-item"><h4>Iterate, don't over-engineer</h4><p>Start simple, let complexity emerge from real requirements — not imagined ones.</p></div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">VS<span class="logo-dot">.</span></div>
+    <p class="footer-copy">&copy; 2025 Virender Singh. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../js/_shared.js"></script>
+<script>
+  const fades = document.querySelectorAll('.fade-up');
+  const fo = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); fo.unobserve(e.target); } });
+  }, {threshold:0.1});
+  fades.forEach(f => fo.observe(f));
+</script>
+</body>
+</html>

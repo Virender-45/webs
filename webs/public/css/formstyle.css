@@ -1,0 +1,225 @@
+/* Google font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* 🌌 Animated Dark Background */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #000428);
+    background-size: 400% 400%;
+    animation: gradientBG 12s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 🧊 Glass Cards */
+.container {
+    backdrop-filter: blur(16px);
+    background: rgba(20, 20, 30, 0.85);
+    padding: 35px 40px;
+    border-radius: 18px;
+    width: 70%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Heading */
+#formTitle {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+/* Labels */
+label {
+    color: #cfd8dc;
+    margin-top: 14px;
+    font-weight: 500;
+}
+
+/* 🧩 FORM GRID */
+form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px 20px;
+}
+
+form label {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* Inputs (RADIO FIX APPLIED HERE) */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    font-size: 15px;
+    transition: .3s;
+    background: #1e1e2f;
+    color: #fff;
+    width: 100%;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+/* Focus glow only for text inputs */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    outline: none;
+    border-color: #00e5ff;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+    transform: scale(1.02);
+}
+
+/* 🎯 Gender Section */
+.gendiv {
+    grid-column: span 3;
+    display: flex;
+    justify-content: space-around;
+    background: #1a1a28;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+/* Add Button */
+form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00e5ff, #2979ff);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+    width: 140px;
+    grid-column: span 3;
+    justify-self: center;
+    margin-top: 10px;
+}
+
+form button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.7);
+}
+
+/* 📊 TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Header */
+thead {
+    background: linear-gradient(135deg, #00e5ff, #2979ff);
+    color: white;
+}
+
+th {
+    padding: 14px;
+    letter-spacing: .5px;
+}
+
+/* Rows */
+td {
+    padding: 12px;
+    border-bottom: 1px solid #2e2e42;
+    color: #e0e0e0;
+}
+
+tbody tr:nth-child(even) {
+    background: #1b1b2b;
+}
+
+tbody tr:nth-child(odd) {
+    background: #161625;
+}
+
+tbody tr:hover {
+    background: #222238;
+    transform: scale(1.01);
+}
+
+/* Action Buttons */
+td button {
+    padding: 7px 12px;
+    margin: 3px;
+    border: none;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: .3s;
+}
+
+td button:first-child {
+    background: #ffca28;
+    color: #000;
+}
+
+td button:last-child {
+    background: #ff5252;
+    color: #fff;
+}
+
+td button:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive */
+@media(max-width:900px) {
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    .gendiv {
+        grid-column: span 1;
+    }
+
+    form button {
+        grid-column: span 1;
+    }
+}
+
+@media(max-width:600px) {
+    .container {
+        width: 95%;
+    }
+}

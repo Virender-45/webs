@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Web Design — Virender Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/_page.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+.device-row { display:flex; gap:24px; align-items:flex-end; justify-content:center; margin:40px 0; flex-wrap:wrap; }
+.device { background:var(--bg-card); border:2px solid var(--border); border-radius:12px; padding:20px; text-align:center; box-shadow:var(--shadow); transition:transform 0.3s; }
+.device:hover { transform:translateY(-6px); }
+.device-screen { background:var(--bg-section); border-radius:8px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; color:var(--text-muted); font-weight:600; border:1px solid var(--border); }
+.device-label { font-size:0.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">VS<span class="logo-dot">.</span></div>
+    <a href="../index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+  </div>
+</header>
+
+<section class="page-hero" data-letter="R">
+  <div class="hero-inner">
+    <div class="hero-icon">📱</div>
+    <div class="page-tag">Skill Deep-Dive</div>
+    <h1>Responsive Web Design</h1>
+    <p class="lead">Creating layouts that work beautifully everywhere — from a 320px phone to a wide-screen desktop — using Flexbox, CSS Grid, and Bootstrap breakpoints.</p>
+  </div>
+</section>
+
+<div class="page-content">
+
+  <div class="two-col fade-up">
+    <div>
+      <div class="section-label">Philosophy</div>
+      <h2 class="section-title">Mobile-First, Then Scale Up</h2>
+      <p class="section-body">Starting from the smallest screen forces you to prioritise what actually matters. Once the mobile layout is solid, progressively enhancing for tablet and desktop is straightforward and avoids the common mistake of cramming a desktop layout onto small screens.</p>
+      <p class="section-body">This portfolio itself is fully responsive — resize your browser to see Flexbox and CSS Grid adapting in real time.</p>
+      <div class="tags">
+        <span class="tag">Mobile-First</span><span class="tag">Flexbox</span><span class="tag">CSS Grid</span>
+        <span class="tag">Media Queries</span><span class="tag">Bootstrap</span><span class="tag">Fluid Typography</span>
+      </div>
+    </div>
+    <div>
+      <div class="section-label">Proficiency</div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Flexbox</span><span class="skill-pct">88%</span></div><div class="bar-track"><div class="bar-fill" data-w="88%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">CSS Grid</span><span class="skill-pct">80%</span></div><div class="bar-track"><div class="bar-fill" data-w="80%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Bootstrap 5</span><span class="skill-pct">85%</span></div><div class="bar-track"><div class="bar-fill" data-w="85%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Media Queries</span><span class="skill-pct">90%</span></div><div class="bar-track"><div class="bar-fill" data-w="90%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Breakpoint Visual</div>
+  <h2 class="section-title fade-up" style="text-align:center">One Layout, Every Screen</h2>
+  <div class="device-row fade-up">
+    <div class="device">
+      <div class="device-screen" style="width:60px;height:100px">📱</div>
+      <div class="device-label">Mobile<br><span style="font-weight:400;color:var(--text-muted)">320px</span></div>
+    </div>
+    <div class="device">
+      <div class="device-screen" style="width:90px;height:120px">📟</div>
+      <div class="device-label">Tablet<br><span style="font-weight:400;color:var(--text-muted)">768px</span></div>
+    </div>
+    <div class="device">
+      <div class="device-screen" style="width:150px;height:100px">💻</div>
+      <div class="device-label">Laptop<br><span style="font-weight:400;color:var(--text-muted)">1024px</span></div>
+    </div>
+    <div class="device">
+      <div class="device-screen" style="width:200px;height:130px">🖥️</div>
+      <div class="device-label">Desktop<br><span style="font-weight:400;color:var(--text-muted)">1200px+</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Code Sample</div>
+  <h2 class="section-title fade-up">Fluid Grid Pattern</h2>
+  <div class="code-block fade-up">
+<span class="cm">/* Auto-responsive grid — no breakpoints needed */</span>
+<span class="kw">.card-grid</span> {
+  <span class="fn">display</span>: grid;
+  <span class="fn">grid-template-columns</span>: <span class="str">repeat(auto-fit, minmax(260px, 1fr))</span>;
+  <span class="fn">gap</span>: <span class="str">24px</span>;
+}
+
+<span class="cm">/* Flexbox nav that collapses gracefully */</span>
+<span class="kw">.nav</span> {
+  <span class="fn">display</span>: flex;
+  <span class="fn">gap</span>: <span class="str">32px</span>;
+  <span class="fn">flex-wrap</span>: wrap;
+}
+
+<span class="kw">@media (max-width: 768px)</span> {
+  <span class="kw">.nav</span> {
+    <span class="fn">flex-direction</span>: column;
+    <span class="fn">position</span>: fixed; <span class="cm">/* Drawer */</span>
+  }
+}
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Techniques</div>
+  <h2 class="section-title fade-up">My Responsive Toolkit</h2>
+  <div class="cards-grid">
+    <div class="card fade-up"><div class="card-icon">📐</div><h3>Fluid Layouts</h3><p>Percentage widths, max-width containers, and auto margins for naturally flowing content.</p></div>
+    <div class="card fade-up"><div class="card-icon">🔡</div><h3>Fluid Typography</h3><p>clamp() for font sizes that scale smoothly between minimum and maximum values.</p></div>
+    <div class="card fade-up"><div class="card-icon">🖼️</div><h3>Responsive Images</h3><p>max-width: 100%, srcset, and object-fit to keep images sharp without overflow.</p></div>
+    <div class="card fade-up"><div class="card-icon">🍔</div><h3>Mobile Navigation</h3><p>Hamburger drawer menus with CSS transforms and JS class toggles — no library needed.</p></div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">VS<span class="logo-dot">.</span></div>
+    <p class="footer-copy">&copy; 2025 Virender Singh. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../js/_shared.js"></script>
+<script>
+  const fills = document.querySelectorAll('.bar-fill');
+  const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ e.target.style.width = e.target.dataset.w; io.unobserve(e.target); } }); }, {threshold:0.3});
+  fills.forEach(f => io.observe(f));
+  const fades = document.querySelectorAll('.fade-up');
+  const fo = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); fo.unobserve(e.target); } }); }, {threshold:0.1});
+  fades.forEach(f => fo.observe(f));
+</script>
+</body>
+</html>

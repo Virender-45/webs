@@ -131,6 +131,7 @@
     <ClCompile Include="core\middleware.cpp" />
     <ClCompile Include="core\ratelimiter.cpp" />
     <ClCompile Include="core\router.cpp" />
+    <ClCompile Include="core\static.cpp" />
     <ClCompile Include="core\threadpool.cpp" />
     <ClCompile Include="db\database.cpp" />
     <ClCompile Include="http\parser.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="core\middleware.h" />
     <ClInclude Include="core\ratelimiter.h" />
     <ClInclude Include="core\router.h" />
+    <ClInclude Include="core\static.h" />
     <ClInclude Include="core\threadpool.h" />
     <ClInclude Include="db\database.h" />
     <ClInclude Include="http\parserr.h" />

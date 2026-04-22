@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Version Control with Git — Virender Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/_page.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">VS<span class="logo-dot">.</span></div>
+    <a href="../index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+  </div>
+</header>
+
+<section class="page-hero" data-letter="G">
+  <div class="hero-inner">
+    <div class="hero-icon">🔗</div>
+    <div class="page-tag">Skill Deep-Dive</div>
+    <h1>Version Control with Git</h1>
+    <p class="lead">Managing code history, collaborating through branches, and shipping confidently — with Git & GitHub as the backbone of every project.</p>
+  </div>
+</section>
+
+<div class="page-content">
+
+  <div class="two-col fade-up">
+    <div>
+      <div class="section-label">Overview</div>
+      <h2 class="section-title">Never Lose Work, Never Fear Change</h2>
+      <p class="section-body">Git gives me the confidence to experiment, refactor boldly, and collaborate without fear. Every project I work on lives in a repository — whether personal or collaborative — and I follow branching strategies that keep the main branch always deployable.</p>
+      <p class="section-body">I use GitHub for hosting, pull request workflows, and maintaining a visible commit history that reflects thoughtful, incremental progress.</p>
+      <div class="tags">
+        <span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">Branching</span>
+        <span class="tag">Merging</span><span class="tag">Pull Requests</span><span class="tag">Commits</span>
+      </div>
+    </div>
+    <div>
+      <div class="section-label">Proficiency</div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Git Core Commands</span><span class="skill-pct">78%</span></div><div class="bar-track"><div class="bar-fill" data-w="78%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">GitHub Workflow</span><span class="skill-pct">75%</span></div><div class="bar-track"><div class="bar-fill" data-w="75%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Branching Strategy</span><span class="skill-pct">70%</span></div><div class="bar-track"><div class="bar-fill" data-w="70%"></div></div></div>
+      <div class="skill-row"><div class="skill-meta"><span class="skill-name">Conflict Resolution</span><span class="skill-pct">65%</span></div><div class="bar-track"><div class="bar-fill" data-w="65%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Workflow</div>
+  <h2 class="section-title fade-up">My Git Workflow</h2>
+  <div class="code-block fade-up">
+<span class="cm"># Feature branch workflow</span>
+<span class="fn">git checkout</span> -b <span class="str">feature/contact-form-validation</span>
+
+<span class="cm"># Stage and commit with descriptive message</span>
+<span class="fn">git add</span> js/script.js
+<span class="fn">git commit</span> -m <span class="str">"feat: add email & name validation to contact form"</span>
+
+<span class="cm"># Push and open pull request on GitHub</span>
+<span class="fn">git push</span> origin feature/contact-form-validation
+
+<span class="cm"># After review: merge and clean up</span>
+<span class="fn">git checkout</span> main
+<span class="fn">git merge</span> --no-ff feature/contact-form-validation
+<span class="fn">git branch</span> -d feature/contact-form-validation
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-up">Core Skills</div>
+  <h2 class="section-title fade-up">What I Practice</h2>
+  <div class="cards-grid">
+    <div class="card fade-up"><div class="card-icon">🌿</div><h3>Branching</h3><p>Feature, hotfix, and release branches to keep development organised and main always stable.</p></div>
+    <div class="card fade-up"><div class="card-icon">🔀</div><h3>Merging & Rebasing</h3><p>Choosing the right strategy — merge commits for history, rebase for a clean linear log.</p></div>
+    <div class="card fade-up"><div class="card-icon">👁️</div><h3>Code Review</h3><p>Pull requests on GitHub with inline comments, change requests, and approval workflows.</p></div>
+    <div class="card fade-up"><div class="card-icon">🕰️</div><h3>History Navigation</h3><p>git log, git blame, git bisect — finding exactly when and why a change was made.</p></div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-label fade-up">Commit Discipline</div>
+  <h2 class="section-title fade-up">Good Commit Habits</h2>
+  <div class="timeline fade-up">
+    <div class="tl-item"><h4>Atomic commits</h4><p>One logical change per commit — not "fixed stuff" but "fix: resolve nav z-index overlap on mobile".</p></div>
+    <div class="tl-item"><h4>Conventional commits</h4><p>Prefix messages with feat:, fix:, docs:, refactor: for a scannable, semantic log.</p></div>
+    <div class="tl-item"><h4>.gitignore discipline</h4><p>Never commit node_modules, .env files, or editor config — keep the repo lean.</p></div>
+    <div class="tl-item"><h4>README always current</h4><p>Documentation lives next to code so it never falls out of sync.</p></div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">VS<span class="logo-dot">.</span></div>
+    <p class="footer-copy">&copy; 2025 Virender Singh. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../js/_shared.js"></script>
+<script>
+  const fills = document.querySelectorAll('.bar-fill');
+  const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ e.target.style.width = e.target.dataset.w; io.unobserve(e.target); } }); }, {threshold:0.3});
+  fills.forEach(f => io.observe(f));
+  const fades = document.querySelectorAll('.fade-up');
+  const fo = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); fo.unobserve(e.target); } }); }, {threshold:0.1});
+  fades.forEach(f => fo.observe(f));
+</script>
+</body>
+</html>

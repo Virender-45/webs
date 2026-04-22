@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <link rel="stylesheet" href="css/formstyle.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2 id="formTitle">Add Data</h2>
+        <form onsubmit="return addData()">
+            <div class="field">
+                <label>Name</label>
+                <input type="text" id="name" placeholder="Enter name">
+            </div>
+            <div class="field">
+                <label>Roll No.</label>
+                <input type="number" id="roll" placeholder="Enter roll no">
+            </div>
+            <div class="field">
+                <label>Confirm Roll No.</label>
+                <input type="number" id="confirmRoll" placeholder="Confirm roll no">
+            </div>
+            <div class="field">
+                <label>Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="field">
+                <label>Select Course</label>
+                <select id="course">
+                    <option>BCA</option>
+                    <option>MCA</option>
+                    <option>BA</option>
+                    <option>MBA</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Gender</label>
+                <div class="gendiv">
+                    <label>
+                        <input type="radio" name="gender" value="Male"> Male
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="Female"> Female
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="Other"> Other
+                    </label>
+                </div>
+            </div>
+            <button type="submit" id="submitBtn">Add</button>
+        </form>
+    </div>
+    <div class="container">
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Course</th>
+                <th>DOB </th>
+                <th>Gender</th>
+                <th>Actions</th>
+            </thead>
+            <tbody id="tableId"></tbody>
+        </table>
+    </div>
+
+
+
+    <script>
+
+        let selectedRow = null;
+
+        function addData() {
+
+            let name = document.getElementById("name").value;
+            let roll = document.getElementById("roll").value;
+            let confirmRoll = document.getElementById("confirmRoll").value;
+            let course = document.getElementById("course").value;
+            let dob = document.getElementById("dob").value;
+            let genderRadio = document.querySelector('input[name="gender"]:checked');
+
+            if (name == "" || roll == "" || confirmRoll == "" || dob == "") {
+                alert("Please fill all fields");
+                return false;
+            }
+
+            if (roll !== confirmRoll) {
+                alert("Roll numbers do not match!");
+                return false;
+            }
+
+            if (genderRadio == null) {
+                alert("Please select gender");
+                return false;
+            }
+
+            let gender = genderRadio.value;
+            let table = document.getElementById("tableId");
+
+            for (let i = 0; i < table.rows.length; i++) {
+                let existingRoll = table.rows[i].cells[1].innerHTML;
+
+                if (selectedRow == table.rows[i]) continue;
+
+                if (existingRoll === roll) {
+                    alert("This Roll Number already exists!");
+                    return false;
+                }
+            }
+            // to update
+            if (selectedRow != null) {
+                selectedRow.cells[0].innerHTML = name;
+                selectedRow.cells[1].innerHTML = roll;
+                selectedRow.cells[2].innerHTML = course;
+                selectedRow.cells[3].innerHTML = dob;
+                selectedRow.cells[4].innerHTML = gender;
+                selectedRow = null;
+            }
+            // to add
+            else {
+                let row = table.insertRow();
+                row.insertCell(0).innerHTML = name;
+                row.insertCell(1).innerHTML = roll;
+                row.insertCell(2).innerHTML = course;
+                row.insertCell(3).innerHTML = dob;
+                row.insertCell(4).innerHTML = gender;
+
+                row.insertCell(5).innerHTML =
+                    `<button onclick="editRow(this)">Edit</button>
+             <button onclick="deleteRow(this)">Delete</button>`;
+            }
+
+            document.getElementById("formTitle").innerText = "Add Data";
+            document.getElementById("submitBtn").innerText = "Add";
+
+            document.querySelector("form").reset();
+            return false;
+        }
+
+        function deleteRow(btn) {
+            let row = btn.parentNode.parentNode;
+            row.remove();
+        }
+
+        function editRow(btn) {
+            selectedRow = btn.parentNode.parentNode;
+
+            document.getElementById("name").value = selectedRow.cells[0].innerHTML;
+            document.getElementById("roll").value = selectedRow.cells[1].innerHTML;
+            document.getElementById("confirmRoll").value = selectedRow.cells[1].innerHTML;
+            document.getElementById("course").value = selectedRow.cells[2].innerHTML;
+            document.getElementById("dob").value = selectedRow.cells[3].innerHTML;
+
+            let genderValue = selectedRow.cells[4].innerHTML;
+            document.querySelector(`input[name="gender"][value="${genderValue}"]`).checked = true;
+
+            document.getElementById("formTitle").innerText = "Edit Data";
+
+            document.getElementById("submitBtn").innerText = "Save";
+        }
+
+    </script>
+</body>
+
+</html>
