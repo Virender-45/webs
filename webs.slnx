@@ -5,10 +5,17 @@
   </Configurations>
   <Folder Name="/Solution Items/">
     <File Path="webs/auth/auth.cpp" />
+    <File Path="webs/core/middleware.cpp" />
+    <File Path="webs/core/ratelimiter.cpp" />
     <File Path="webs/core/router.cpp" />
+    <File Path="webs/core/static.cpp" />
+    <File Path="webs/core/threadpool.cpp" />
     <File Path="webs/db/database.cpp" />
     <File Path="webs/http/parser.cpp" />
+    <File Path="webs/utils/hash.cpp" />
+    <File Path="webs/utils/logger.cpp" />
     <File Path="webs/utils/response.cpp" />
+    <File Path="webs/utils/validation.cpp" />
   </Folder>
   <Project Path="webs/webs.vcxproj" Id="d05641bf-c968-4782-b17f-28f22b107aac" />
 </Solution>
