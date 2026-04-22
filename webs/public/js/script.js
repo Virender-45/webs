@@ -10,41 +10,48 @@
 /* ----------------------------------------------------------------
    2. CONTACT FORM VALIDATION
    ---------------------------------------------------------------- */
-document.getElementById("contactForm").addEventListener("submit", function (e) {
+document.getElementById("contactForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
+    const subject = document.getElementById("subject").value.trim();
     const message = document.getElementById("message").value.trim();
     const msg = document.getElementById("formMsg");
 
     if (name.length < 3) {
         showFormMsg(msg, "⚠ Name must be at least 3 characters.", "error");
-        shake(document.getElementById("name"));
-        return;
-    }
-    if (!email.includes("@") || !email.includes(".")) {
-        showFormMsg(msg, "⚠ Enter a valid email address.", "error");
-        shake(document.getElementById("email"));
-        return;
-    }
-    if (message.length < 10) {
-        showFormMsg(msg, "⚠ Message must be at least 10 characters.", "error");
-        shake(document.getElementById("message"));
         return;
     }
 
     const btn = this.querySelector("button[type='submit']");
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+    btn.innerHTML = 'Sending...';
     btn.disabled = true;
 
-    setTimeout(() => {
-        showFormMsg(msg, "✅ Message sent successfully! I'll get back to you soon.", "success");
-        this.reset();
-        updateCharCount(0);
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
-        btn.disabled = false;
-    }, 1500);
+    try {
+        const res = await fetch("/contact", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name, email, subject, message })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            showFormMsg(msg, "✅ Message saved!", "success");
+            this.reset();
+        } else {
+            showFormMsg(msg, data.error || "Something went wrong", "error");
+        }
+
+    } catch (err) {
+        showFormMsg(msg, "Server error", "error");
+    }
+
+    btn.innerHTML = 'Send Message';
+    btn.disabled = false;
 });
 
 function showFormMsg(el, text, type) {

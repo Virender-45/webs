@@ -4,6 +4,7 @@
 #include "../utils/validation.h"
 #include "../utils/hash.h"
 #include "../core/static.h"
+#include <fstream>
 
 using json = nlohmann::json;
 
@@ -25,7 +26,7 @@ json handleRoute(const HttpRequest& req, int& status) {
             }
         }
 
-        // STATIC FILE HANDLER
+        // ================= STATIC FILE HANDLER =================
         if (req.method == "GET") {
 
             std::string contentType;
@@ -97,6 +98,36 @@ json handleRoute(const HttpRequest& req, int& status) {
             }
         }
 
+        // CONTACT FORM (ADDED HERE)
+        else if (req.path == "/contact" && req.method == "POST") {
+
+            if (!body.contains("name") || !body.contains("email") || !body.contains("message")) {
+                response["error"] = "Missing fields";
+                status = 400;
+                return response;
+            }
+
+            std::ofstream file("messages.txt", std::ios::app);
+
+            if (!file.is_open()) {
+                response["error"] = "Failed to save message";
+                status = 500;
+                return response;
+            }
+
+            file << "Name: " << body["name"] << "\n";
+            file << "Email: " << body["email"] << "\n";
+            file << "Subject: " << body["subject"] << "\n";
+            file << "Message: " << body["message"] << "\n";
+            file << "-----------------------------\n";
+
+            file.close();
+
+            response["message"] = "Message saved";
+            status = 200;
+        }
+
+        // ================= NOT FOUND =================
         else {
             response["error"] = "Not Found";
             status = 404;
