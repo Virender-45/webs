@@ -20,7 +20,17 @@ MiddlewareManager middlewareManager;
 void handleClient(SOCKET clientSocket, std::string clientIP) {
 
     char buffer[4096] = { 0 };
-    int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+    int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+
+    if (bytesReceived <= 0)
+    {
+        closesocket(clientSocket);
+        return;
+    }
+
+    buffer[bytesReceived] = '\0';
+
+    std::string requestStr(buffer);
 
     if (bytesReceived > 0) {
 

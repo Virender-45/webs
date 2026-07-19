@@ -7,7 +7,7 @@
 std::map<std::string, std::vector<std::chrono::steady_clock::time_point>> requestLog;
 std::mutex rateMutex;
 
-const int MAX_REQUESTS = 10;
+const int MAX_REQUESTS = 1000;
 const int TIME_WINDOW = 10; // seconds
 
 bool isRateLimited(const std::string& ip) {
