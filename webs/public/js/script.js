@@ -15,43 +15,50 @@ document.getElementById("contactForm").addEventListener("submit", async function
 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
-    const subject = document.getElementById("subject").value.trim();
     const message = document.getElementById("message").value.trim();
     const msg = document.getElementById("formMsg");
 
     if (name.length < 3) {
         showFormMsg(msg, "⚠ Name must be at least 3 characters.", "error");
+        shake(document.getElementById("name"));
+        return;
+    }
+    if (!email.includes("@") || !email.includes(".")) {
+        showFormMsg(msg, "⚠ Enter a valid email address.", "error");
+        shake(document.getElementById("email"));
+        return;
+    }
+    if (message.length < 10) {
+        showFormMsg(msg, "⚠ Message must be at least 10 characters.", "error");
+        shake(document.getElementById("message"));
         return;
     }
 
     const btn = this.querySelector("button[type='submit']");
-    btn.innerHTML = 'Sending...';
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
     btn.disabled = true;
 
     try {
-        const res = await fetch("/contact", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name, email, subject, message })
+        const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, subject: document.getElementById('subject').value.trim(), message })
         });
+        const data = await response.json();
 
-        const data = await res.json();
-
-        if (res.ok) {
-            showFormMsg(msg, "✅ Message saved!", "success");
+        if (data.success) {
+            showFormMsg(msg, "✅ Message sent successfully! I'll get back to you soon.", "success");
             this.reset();
+            updateCharCount(0);
         } else {
-            showFormMsg(msg, data.error || "Something went wrong", "error");
+            showFormMsg(msg, "⚠ " + data.message, "error");
         }
-
     } catch (err) {
-        showFormMsg(msg, "Server error", "error");
+        showFormMsg(msg, "⚠ Could not send message. Please try again.", "error");
+    } finally {
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+        btn.disabled = false;
     }
-
-    btn.innerHTML = 'Send Message';
-    btn.disabled = false;
 });
 
 function showFormMsg(el, text, type) {
@@ -230,16 +237,24 @@ const themes = {
         "--primary-light": "#9b6fd4",
         "--accent": "#c084fc",
         "--accent-soft": "#f3e8ff",
-        "--bg": "#faf7ff",
-        "--bg-card": "#ffffff",
-        "--bg-section": "#f3eaff",
+        "--bg": "#e8dff5",
+        "--bg-card": "rgba(255,255,255,0.15)",
+        "--bg-section": "rgba(243,234,255,0.4)",
         "--text-head": "#1a0a2e",
         "--text-body": "#3d2b5a",
         "--text-muted": "#8a6fb0",
-        "--border": "rgba(108, 53, 168, 0.15)",
+        "--border": "rgba(108, 53, 168, 0.18)",
         "--shadow": "0 8px 32px rgba(108, 53, 168, 0.12)",
         "--shadow-hover": "0 16px 48px rgba(108, 53, 168, 0.22)",
-        "--hero-img-after": "linear-gradient(to top, rgba(108,53,168,0.55), transparent)"
+        "--hero-img-after": "linear-gradient(to top, rgba(108,53,168,0.55), transparent)",
+        "--bg-gradient": "radial-gradient(ellipse at 20% 10%, #c9a7eb 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, #a78bcc 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #d4bef5 0%, transparent 60%)",
+        "--glass-bg": "rgba(255,255,255,0.25)",
+        "--glass-card": "rgba(255,255,255,0.18)",
+        "--glass-border": "rgba(255,255,255,0.35)",
+        "--glass-shadow": "0 8px 32px rgba(108,53,168,0.15), inset 0 1px 0 rgba(255,255,255,0.4)",
+        "--glass-shadow-hover": "0 20px 60px rgba(108,53,168,0.28), inset 0 1px 0 rgba(255,255,255,0.5)",
+        "--glass-input": "rgba(255,255,255,0.25)",
+        "--glass-input-focus": "rgba(255,255,255,0.45)"
     },
 
     saffron: {
@@ -248,16 +263,24 @@ const themes = {
         "--primary-light": "#ffb266",
         "--accent": "#ff9933",
         "--accent-soft": "#fff2e6",
-        "--bg": "#fff9f2",
-        "--bg-card": "#ffffff",
-        "--bg-section": "#fff2e6",
+        "--bg": "#f5dfc0",
+        "--bg-card": "rgba(255,255,255,0.18)",
+        "--bg-section": "rgba(255,242,230,0.4)",
         "--text-head": "#2b1300",
         "--text-body": "#5a3a1a",
         "--text-muted": "#a67c52",
-        "--border": "rgba(255,122,0,0.18)",
+        "--border": "rgba(255,122,0,0.2)",
         "--shadow": "0 8px 32px rgba(255,122,0,0.15)",
         "--shadow-hover": "0 16px 48px rgba(255,122,0,0.28)",
-        "--hero-img-after": "linear-gradient(to top, rgba(255,122,0,0.55), transparent)"
+        "--hero-img-after": "linear-gradient(to top, rgba(255,122,0,0.55), transparent)",
+        "--bg-gradient": "radial-gradient(ellipse at 20% 10%, #ffcc88 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, #ffaa55 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #ffe0a0 0%, transparent 60%)",
+        "--glass-bg": "rgba(255,255,255,0.28)",
+        "--glass-card": "rgba(255,255,255,0.22)",
+        "--glass-border": "rgba(255,255,255,0.4)",
+        "--glass-shadow": "0 8px 32px rgba(255,122,0,0.15), inset 0 1px 0 rgba(255,255,255,0.45)",
+        "--glass-shadow-hover": "0 20px 60px rgba(255,122,0,0.3), inset 0 1px 0 rgba(255,255,255,0.55)",
+        "--glass-input": "rgba(255,255,255,0.3)",
+        "--glass-input-focus": "rgba(255,255,255,0.5)"
     },
 
     neon: {
@@ -266,15 +289,23 @@ const themes = {
         "--primary-light": "#ff7bb8",
         "--accent": "#00e5ff",
         "--bg": "#0f0820",
-        "--bg-card": "#17102f",
-        "--bg-section": "#120a26",
+        "--bg-card": "rgba(255,46,136,0.08)",
+        "--bg-section": "rgba(18,10,38,0.6)",
         "--text-head": "#ffffff",
         "--text-body": "#d6d2ff",
         "--text-muted": "#8f88c7",
         "--border": "rgba(255,255,255,0.08)",
         "--shadow": "0 8px 32px rgba(255,46,136,0.25)",
         "--shadow-hover": "0 16px 48px rgba(0,229,255,0.35)",
-        "--hero-img-after": "linear-gradient(to top, rgba(255,46,136,0.55), rgba(106,92,255,0.35), transparent)"
+        "--hero-img-after": "linear-gradient(to top, rgba(255,46,136,0.55), rgba(106,92,255,0.35), transparent)",
+        "--bg-gradient": "radial-gradient(ellipse at 20% 10%, rgba(255,46,136,0.35) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(0,229,255,0.25) 0%, transparent 50%), radial-gradient(ellipse at 50% 30%, rgba(106,92,255,0.2) 0%, transparent 60%)",
+        "--glass-bg": "rgba(255,46,136,0.1)",
+        "--glass-card": "rgba(255,255,255,0.05)",
+        "--glass-border": "rgba(255,255,255,0.12)",
+        "--glass-shadow": "0 8px 32px rgba(255,46,136,0.2), inset 0 1px 0 rgba(255,255,255,0.08)",
+        "--glass-shadow-hover": "0 20px 60px rgba(255,46,136,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",
+        "--glass-input": "rgba(255,255,255,0.06)",
+        "--glass-input-focus": "rgba(255,255,255,0.12)"
     }
 
 };
