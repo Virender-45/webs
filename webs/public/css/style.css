@@ -1470,7 +1470,7 @@ body.theme-neon .site-footer {
 }
 
 body.theme-neon .nav {
-    background: rgba(15, 8, 32, 0.98) !important;
+    /* background: rgba(15, 8, 32, 0.98) !important; */
     border-left-color: rgba(255, 255, 255, 0.08) !important;
 }
 
